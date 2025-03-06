@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
             <div className="container mx-auto px-4">
                 <div className="flex flex-wrap justify-between items-center">
                     <div className="w-full md:w-1/3 mb-6 md:mb-0">
-                        <h3 className="text-2xl font-bold mb-4">Prashant Adhikari</h3>
+                        <h3 className="text-2xl font-bold mb-4">Ina Basnet</h3>
                         <p className="text-gray-400">Full Stack Developer passionate about creating innovative web solutions.</p>
                     </div>
                     <div className="w-full md:w-1/3 mb-6 md:mb-0">
@@ -35,7 +35,7 @@ const Footer: React.FC = () => {
                     </div>
                 </div>
                 <div className="border-t border-gray-700 mt-8 pt-8 text-center">
-                    <p className="text-gray-400">&copy; {new Date().getFullYear()} Prashant Adhikari. All rights reserved.</p>
+                    <p className="text-gray-400">&copy; {new Date().getFullYear()} Ina Basnet. All rights reserved.</p>
                 </div>
             </div>
         </footer>
