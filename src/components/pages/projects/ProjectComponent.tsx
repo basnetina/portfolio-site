@@ -28,24 +28,24 @@ const ProjectCard: React.FC<ProjectGet> = ({ id, title, description, imageUrl, g
           </span>
                 ))}
             </div>
-            <div className="flex justify-between">
-                <a
+            {(githubUrl || liveUrl) && <div className="flex justify-between">
+                {githubUrl && <a
                     href={githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white flex items-center"
                 >
-                    <Github size={20} className="mr-1" /> Code
-                </a>
-                <a
+                    <Github size={20} className="mr-1"/> Code
+                </a>}
+                {liveUrl && <a
                     href={liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 flex items-center"
                 >
-                    <ExternalLink size={20} className="mr-1" /> Live Demo
-                </a>
-            </div>
+                    <ExternalLink size={20} className="mr-1"/> Live Demo
+                </a>}
+            </div>}
         </div>
     </div>
 )

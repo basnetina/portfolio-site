@@ -52,11 +52,9 @@ const AddProjectPage: React.FC = () => {
             const projectData = {
                 ...formData,
                 imageUrl: base64Image,
-                details: value ? value : undefined
+                details: value
             }
 
-           
-            
             await addProject(projectData)
             await revalidateProjects()
         } catch (error) {

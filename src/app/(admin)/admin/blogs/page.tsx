@@ -1,28 +1,38 @@
 "use client"
 
 import { useState } from "react"
-import blogs, {useDeleteBlogMutation, useFetchBlogsServerQuery} from "@/store/features/blogs"
+import blogs, {useDeleteBlogMutation, useFetchBlogsServerQuery, useUpdateBlogMutation} from "@/store/features/blogs"
 import { BlogGet } from "@/types/BlogType"
 import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
-import { CalendarIcon, Tag, Trash2 } from 'lucide-react'
+import {CalendarIcon, EditIcon, Tag, Trash2} from 'lucide-react'
 import { Skeleton } from "@/components/ui/skeleton"
 import unixToDate from "@/utils/unixToDate";
 import {useCustomToast} from "@/hooks/useCustomToast";
+import FormUpdateBlogDetails from "@/components/pages/admin/blogs/FormUpdateBlogDetails";
 
 export default function BlogsPage() {
-    const { data, isLoading, error } = useFetchBlogsServerQuery(process.env.NEXT_PUBLIC_MY_EMAIL )
+    const { data, isLoading, error } = useFetchBlogsServerQuery({email:process.env.NEXT_PUBLIC_MY_EMAIL, withThumbnail: true})
     const [blogToDelete, setBlogToDelete] = useState<BlogGet | null>(null)
+    const [blogToUpdate, setBlogToUpdate] = useState<BlogGet | null>(null)
     const [isDeleting, setIsDeleting] = useState(false)
+    const [isUpdating, setIsUpdating] = useState(false)
     const [deleteBlog, {isLoading:isLoadingDelete, data: dataDelete}] = useDeleteBlogMutation()
+    const [updateBlog, {isLoading:isLoadingUpdate, data: dataUpdate}] = useUpdateBlogMutation()
 
     const handleDeleteClick = (e: React.MouseEvent, blog: BlogGet) => {
         e.preventDefault()
         e.stopPropagation()
         setBlogToDelete(blog)
+    }
+
+    const handleEditClick = (e: React.MouseEvent, blog: BlogGet) => {
+        e.preventDefault()
+        e.stopPropagation()
+        setBlogToUpdate(blog)
     }
 
     const handleDeleteConfirm = async () => {
@@ -39,8 +49,27 @@ export default function BlogsPage() {
         }
     }
 
+    const handleUpdateConfirm = async (data: any) => {
+        if (!blogToUpdate) return
+        setIsUpdating(true)
+        try {
+            updateBlog({...data, id:blogToUpdate?.id})
+        } catch (error) {
+            setIsUpdating(false)
+        } finally {
+            setIsUpdating(false)
+        }
+    }
+
     useCustomToast({
         data: dataDelete
+    })
+
+    useCustomToast({
+        data: dataUpdate,
+        successFn: () => {
+            setBlogToUpdate(null)
+        }
     })
 
     if (isLoading) {
@@ -116,6 +145,16 @@ export default function BlogsPage() {
                             <span className="sr-only">Delete blog</span>
                         </Button>
 
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="absolute top-2 left-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity"
+                            onClick={(e) => handleEditClick(e, blog)}
+                        >
+                            <EditIcon className="h-4 w-4" />
+                            <span className="sr-only">Update Details</span>
+                        </Button>
+
                         <Link href={`/admin/blogs/${blog.id}`}>
                             <Card className="h-full overflow-hidden transition-all duration-200 hover:shadow-md group-hover:border-primary">
                                 <div className="h-48 w-full bg-muted overflow-hidden">
@@ -174,6 +213,24 @@ export default function BlogsPage() {
                             {isDeleting ? "Deleting..." : "Delete"}
                         </AlertDialogAction>
                     </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
+            <AlertDialog
+                open={!!blogToUpdate}
+                onOpenChange={(open: boolean) => !open && setBlogToUpdate(null)}>
+                <AlertDialogContent className={`w-[700px] h-[450px] max-w-[90vw] max-h-[90vh] ${blogToUpdate?.thumbnail ? 'h-[450px]': 'h-[350px]'}`}>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Update Blog: {blogToUpdate?.title}</AlertDialogTitle>
+                    </AlertDialogHeader>
+
+                    {/*Blog Details Update Form*/}
+                    <FormUpdateBlogDetails
+                        handleBlogUpdate={handleUpdateConfirm}
+                        isLoading={isLoadingUpdate}
+                        blog={blogToUpdate}
+                        handleClose={()=> setBlogToUpdate(null)}
+                    />
                 </AlertDialogContent>
             </AlertDialog>
         </div>

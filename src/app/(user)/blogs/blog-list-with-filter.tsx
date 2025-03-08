@@ -41,7 +41,7 @@ export default function BlogListWithFilters() {
     const searchQuery = searchParams.get("search") || ""
     const sortBy = searchParams.get("sort") || "newest"
 
-    const { data: blogs, isLoading } = useFetchBlogsServerQuery(process.env.NEXT_PUBLIC_MY_EMAIL)
+    const { data: blogs, isLoading } = useFetchBlogsServerQuery({email:process.env.NEXT_PUBLIC_MY_EMAIL, withThumbnail: false})
 
     const itemsPerPage = 5
 

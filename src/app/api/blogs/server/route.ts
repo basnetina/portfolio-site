@@ -11,6 +11,7 @@ export async function GET(req: NextRequest){
         );
         const searchParams = req.nextUrl.searchParams
         const emailParams = searchParams.get('email')
+        const withThumbnail = searchParams.get('withThumbnail')
 
         if(emailParams){
             const filterQuery = where(
@@ -31,13 +32,15 @@ export async function GET(req: NextRequest){
             blogs.push({...doc.data(), id: doc.id})
         });
 
+
         return Response.json({
             status: 'SUCCESS',
             message: 'Data retrieved Successfully!',
             blogs: blogs?.map(blog=> {
                 return {
                     ...blog,
-                    content: undefined
+                    content: undefined,
+                    thumbnail: withThumbnail == "true" ? blog?.thumbnail : undefined
                 }
             })
         })

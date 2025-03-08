@@ -21,3 +21,7 @@ export async function revalidateProjects() {
 export async function revalidateEducation() {
     revalidateTag('education');
 }
+
+export async function revalidateBlogs() {
+    revalidateTag('blogs');
+}

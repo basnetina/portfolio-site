@@ -32,7 +32,7 @@ async function createAdminUser(email, password) {
 const [,, email, password] = process.argv;
 
 if (!email || !password) {
-    console.error('No email and Password found')
+    console.error("Usage: ts-node createAdmin.ts <email> <password>");
     process.exit(1);
 }
 

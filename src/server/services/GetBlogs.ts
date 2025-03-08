@@ -2,7 +2,7 @@ export async function getServerBlogs() {
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/blogs/server?email=${process.env.NEXT_PUBLIC_MY_EMAIL}`,{
             next: {
-                tags: ['projects'],
+                tags: ['blogs'],
                 revalidate: 60
             }
         });

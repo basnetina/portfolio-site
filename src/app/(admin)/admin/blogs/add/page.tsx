@@ -10,6 +10,7 @@ import {useAddBlogMutation} from "@/store/features/blogs";
 import {useCustomToast} from "@/hooks/useCustomToast";
 import CustomLoadingBtn from "@/components/custom-ui/loading/CustomLoadingBtn";
 import {useRouter} from "next/navigation";
+import {revalidateBlogs} from "@/app/actions";
 
 const AddBlogsPage = () => {
     const [value, setValue] = useState<Content>('')
@@ -17,11 +18,14 @@ const AddBlogsPage = () => {
     const [addBlog, {isLoading: isLoadingAdd, data: dataAdd}] = useAddBlogMutation()
     const router = useRouter()
 
-    const handlePublishBlog = () => {
+    const handlePublishBlog = async () => {
         addBlog({
             title,
             content: value?.toString(),
         })
+
+        await revalidateBlogs()
+
     }
 
     useCustomToast({

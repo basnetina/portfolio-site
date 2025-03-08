@@ -4,13 +4,11 @@ import { Suspense } from "react"
 import unixToDate from "@/utils/unixToDate"
 import Divider from "@/components/custom-ui/divider/Divider"
 import ContentRenderer from "@/components/pages/users/blogs/ContentRenderer";
-import Head from "next/head";
-import Script from "next/script";
 
 async function getBlogData(id: string) {
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/blogs/${id}`, {
-            next: { revalidate: 3600, tags: ['blogs'] },
+            next: { tags: ['blogs'] },
         })
 
         if (!res.ok) return null
@@ -94,3 +92,18 @@ export default async function BlogPage({ params }: { params: Promise<{ title: st
     )
 }
 
+
+export async function generateMetadata({ params }: {params: Promise<{ title: string}>}) {
+    const title = (await params)?.title
+    const id = title?.split("-").at(-1)
+    if (!id) {
+        return {}
+    }
+    const data1 = await getBlogData(id)
+    const blog = data1?.data
+
+    return {
+        title: blog?.title,
+        description: blog?.subtitle,
+    }
+}

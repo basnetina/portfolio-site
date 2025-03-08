@@ -14,7 +14,7 @@ const inter = Manrope({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
     title: "Admin Panel",
-    description: "Admin panel for My Portfolio App",
+    description: "Admin panel for My Next.js App",
 }
 
 export default function AdminLayout({

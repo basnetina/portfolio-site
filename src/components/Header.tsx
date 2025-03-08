@@ -5,6 +5,7 @@ import { Source_Code_Pro } from "next/font/google"
 import {usePathname, useRouter} from "next/navigation";
 import {useSession} from "next-auth/react";
 import {Icon} from "@iconify/react";
+import textToCamelCase from "@/utils/textToCamelCase";
 
 const sourceCodePro = Source_Code_Pro({ subsets: ["latin"] })
 
@@ -46,7 +47,7 @@ const Header = () => {
                     <Link href={'/'} onClick={()=>{
                         setActiveSection("")
                     }} className={`text-2xl font-bold ${sourceCodePro.className}`}>
-                        {"<inaBasnet />"}
+                        {`<${textToCamelCase(process.env.NEXT_PUBLIC_MY_NAME)} />`}
                     </Link>
                     <div className="md:hidden">
                         <button onClick={toggleMenu} className="text-white focus:outline-none">

@@ -9,6 +9,7 @@ import {Input} from "@/components/ui/input";
 import { useFetchSingleBlogQuery, useUpdateBlogMutation} from "@/store/features/blogs";
 import {useCustomToast} from "@/hooks/useCustomToast";
 import CustomLoadingBtn from "@/components/custom-ui/loading/CustomLoadingBtn";
+import {revalidateBlogs} from "@/app/actions";
 
 
 const UpdateBlogPage = ({params}:{params: Promise<{id: string}>}) => {
@@ -18,12 +19,14 @@ const UpdateBlogPage = ({params}:{params: Promise<{id: string}>}) => {
     const [title, setTitle] = useState('')
     const [updateBlog, {isLoading: isLoadingUpdate, data: dataUpdate}] = useUpdateBlogMutation()
 
-    const handlePublishBlog = () => {
+    const handlePublishBlog = async () => {
         updateBlog({
             title,
             content: value?.toString(),
             id
         })
+
+        await revalidateBlogs()
     }
 
     useEffect(() => {

@@ -23,8 +23,8 @@ const blogAPI = createApi({
             transformResponse: (response: any ) => response.data || null
         }),
         fetchBlogsServer: builder.query({
-           query: (email) => ({
-               url: `/blogs/server?email=${email}`,
+           query: ({email, withThumbnail = false}) => ({
+               url: `/blogs/server?email=${email}&withThumbnail=${withThumbnail}`,
                method: 'GET'
            }),
             providesTags: ['blogAPI'],
